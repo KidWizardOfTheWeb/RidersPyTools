@@ -1,5 +1,3 @@
-# Example Package
+# RidersPyTools
 
-This is a simple example package. You can use
-[GitHub-flavored Markdown](https://guides.github.com/features/mastering-markdown/)
-to write your content.
+Package designed to write scripts for Sonic Riders (GameCube) and Sonic Riders: Zero Gravity (Wii). Compatible with vanilla/all mods.
