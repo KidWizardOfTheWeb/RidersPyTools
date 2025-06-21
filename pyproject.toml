@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling >= 1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "RidersPyTools_KC"
+version = "0.0.1"
+authors = [
+  { name="KC", email="smasih2020@gmail.com" },
+]
+description = "Tools to read/write data and scripts for Sonic Riders (GC) on dolphin"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dolphin-memory-engine>=1.3.0"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/KidWizardOfTheWeb/RidersPyTools"
+Issues = "https://github.com/KidWizardOfTheWeb/RidersPyTools/issues"
