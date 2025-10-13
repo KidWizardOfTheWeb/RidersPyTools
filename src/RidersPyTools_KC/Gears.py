@@ -23,7 +23,7 @@ GEAR_POWER = 21
 GEAR_OPA_OPA = 22
 GEAR_CRAZY = 23
 GEAR_BERSERKER = 24
-GEAR_E_RIDER = 25  # Eggman Default Gear
+GEAR_E_RIDER = 25  # Eggman Default Gear (vanilla)
 GEAR_AIR_TANK = 26
 GEAR_HEAVY_BIKE = 27
 GEAR_DESTROYER = 28
@@ -33,13 +33,15 @@ GEAR_COVER_F = 31
 GEAR_COVER_P = 32
 GEAR_HANG_ON = 33
 GEAR_SUPER_HANG_ON = 34
-GEAR_DARKNESS = 35  # Shadow Default Gear
+GEAR_DARKNESS = 35  # Shadow Default Gear (vanilla)
 GEAR_GRINDER = 36
 GEAR_ADVANTAGE_S = 37
 GEAR_ADVANTAGE_F = 38
 GEAR_ADVANTAGE_P = 39
 GEAR_CANNONBALL = 40
 GEAR_GUN_GEAR = 41 # TE Original No. 1
+GEAR_BOARD_70 = 42 # TE Original No. 2
+GEAR_BITO = 43 # TE Original No. 3
 
 GEAR_ID_TO_NAME = {
     GEAR_DEFAULT: "Default Gear",
@@ -83,6 +85,8 @@ GEAR_ID_TO_NAME = {
     GEAR_ADVANTAGE_F: "Advantage-F",
     GEAR_ADVANTAGE_P: "Advantage-P",
     GEAR_CANNONBALL: "Cannonball",
-    GEAR_GUN_GEAR: "Gun Gear"
+    GEAR_GUN_GEAR: "Gun Gear",
+    GEAR_BOARD_70: "Board '70",
+    GEAR_BITO: "Bito"
 }
 ALL_GEARS = list(GEAR_ID_TO_NAME.keys())

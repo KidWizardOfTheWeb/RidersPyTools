@@ -1,18 +1,25 @@
 """
 CLASS SCHEMA FOR PLAYER
 
-The idea is that we want to read/write to player offsets, so either we do:
+The idea is that we want to read/write to player offsets, so we will use a dict for easy access:
 
-Player.read(rings)
+RidersObject["players"] -> accesses the "players" symbol (list of players).
 
-or
+For player ptr data, use a nested dictionary to read/write from offsets. Easiest thing on the eyes, probably:
 
-Player.rings
+RidersObject["players"][0]["currentAir"]
 
-whatever type we use, the function associated will read byte, halfword, word, or float as needed from
+Where the layers for the dictionary would have a name and address associated with each.
+"Players" is special, due to it being a list
+
+To write:
+RidersObject["players"][0]["currentAir"].write(X)
+
+Create a subclass for read/write method
+
+The function associated needs to read byte, halfword, word, or float as needed from
 dolphin mem engine, depending on the data from the known player struct
 
-TODO:
 We need to find a proper way to associate a data type flag to each offset to make the switch case in the read
 function match case properly, then we must add the player pointer to the offset, read that data from dolphin,
 and return that.

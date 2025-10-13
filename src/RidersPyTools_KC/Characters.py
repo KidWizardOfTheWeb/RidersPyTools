@@ -48,7 +48,7 @@ CHR_ID_TO_DEFAULT_GEAR_NAME = {
     CHR_ROUGE: "Temptation",
     CHR_NIGHTS: "Night Sky",
     CHR_AIAI: "BANANA",
-    CHR_ULALA: "Channel5",
+    CHR_ULALA: "Channel-5",
     CHR_E10G: "E-gearG",
     CHR_E10R: "E-gearR"
 }

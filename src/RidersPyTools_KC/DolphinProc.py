@@ -5,6 +5,7 @@ import GameState
 
 # def dolphin_connection_proc():
 print("Attempting to connect to Dolphin...")
+print("If Dolphin is not open, open it now, or close this program.")
 dolphin_memory_engine.hook()
 if dolphin_memory_engine.is_hooked():
     # Hook and check the game (convert to async def later)

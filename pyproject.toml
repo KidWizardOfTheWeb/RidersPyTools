@@ -8,7 +8,7 @@ version = "0.0.1"
 authors = [
   { name="KC", email="smasih2020@gmail.com" },
 ]
-description = "Tools to read/write data and scripts for Sonic Riders (GC) on dolphin"
+description = "Tools to read/write data and scripts for Sonic Riders (GC) & mods on dolphin"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
