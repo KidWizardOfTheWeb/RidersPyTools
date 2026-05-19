@@ -10,7 +10,7 @@ BASE_ID: int = 8770000
 VANILLA_PLAYER_PTR: int = 0x80609440
 
 # NOTE: init player ptr for TE if detected using map file/map file passed in
-TE_PLAYER_PTR: int = 0x8054b100 # change to match the current ptr at time of release. Read main.map using map parser and change in config.py.
+TE_PLAYER_PTR: int = 0x80532d80 # change to match the current ptr at time of release. Read main.map using map parser and change in config.py.
 # 2.4.6 fix 1 0x80532d80
 
 ZG_PLAYER_PTR: int = 0x804970CC # Player 1, other players may not be sequential. Do more research for this.

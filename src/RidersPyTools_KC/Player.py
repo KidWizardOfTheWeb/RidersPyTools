@@ -1,30 +1,5 @@
 """
 CLASS SCHEMA FOR PLAYER
-
-The idea is that we want to read/write to player offsets, so we will use a dict for easy access:
-
-RidersObject["players"] -> accesses the "players" symbol (list of players).
-
-For player ptr data, use a nested dictionary to read/write from offsets. Easiest thing on the eyes, probably:
-
-RidersObject["players"][0]["currentAir"]
-
-Where the layers for the dictionary would have a name and address associated with each.
-"Players" is special, due to it being a list
-
-To write:
-RidersObject["players"][0]["currentAir"].write(X)
-
-Create a subclass for read/write method
-
-The function associated needs to read byte, halfword, word, or float as needed from
-dolphin mem engine, depending on the data from the known player struct
-
-We need to find a proper way to associate a data type flag to each offset to make the switch case in the read
-function match case properly, then we must add the player pointer to the offset, read that data from dolphin,
-and return that.
-
-Writing would be similar, but taking an extra parameter for data to write to the offset given.
 """
 import time
 
@@ -152,6 +127,12 @@ class Player:
         # TODO: Define special flags for bitfield.
         # self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
         self.rings = GenericData(ptr_start_addr + 0xB98, u32)
+
+        # This is an array of bytes:
+        # 1st byte = ms, 2nd byte = sec, 3rd byte = min
+        # Note: on lap being completed, this resets to zero in-game.
+        self.finishTime = [GenericData(ptr_start_addr + 0xFF8, u8), GenericData(ptr_start_addr + 0xFF9, u8), GenericData(ptr_start_addr + 0xFFA, u8)]
+
         self.currentLap = GenericData(ptr_start_addr + 0x102A, u8)
         self.previousLap = GenericData(ptr_start_addr + 0x102B, u8)
         self.placement_counter = GenericData(ptr_start_addr + 0x102C, u8)

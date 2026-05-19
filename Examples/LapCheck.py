@@ -1,10 +1,29 @@
 from src.RidersPyTools_KC.Player import Player, DME
+from src.RidersPyTools_KC.RidersObject import RidersObject
+from src.RidersPyTools_KC.include.Constants import *
+
+# Python imports
+import datetime
 
 if __name__ == "__main__":
+    # Keep some globals for data checks
+    diff_min = 0
+    diff_sec = 0
+    diff_milli = 0
+
+    minutes = 0
+    seconds = 0
+    milliseconds = 0
+
+    # Hook Dolphin here
     DME.hook()
 
     # Instantiate player ptr on py side
-    player1 = Player(0, 0x80532d80)
+    player1 = Player(0, TE_PLAYER_PTR)
+
+    # Instantiate the stage timer for 2.4.6.1
+    # (at the time of writing, this is the only data in here)
+    ridersObject1 = RidersObject(addr=0x8053C480)
 
     # Set a global lap counter as a lock mechanism
     # Get current lap count (we do this so this counts even if they are past init)
@@ -16,10 +35,33 @@ if __name__ == "__main__":
     # Use in-game lap count to check updates.
     while True:
         if player1.currentLap > py_lap_count:
+            # Show time for lap.
+            minutes = int(ridersObject1.stageTimer[2])
+            seconds = int(ridersObject1.stageTimer[1])
+            milliseconds = int(ridersObject1.stageTimer[0])
+            print("Lap time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, milliseconds))
+
+            # Print and save diffs
+            current_time = datetime.time(minute=minutes, second=seconds, microsecond=milliseconds)
+            diff_time = datetime.time(minute=diff_min, second=diff_sec, microsecond=diff_milli)
+
+            # Yes, the datetime class does NOT allow the difference between two time objects. This is how we have to do it.
+            overall_time_diff = datetime.datetime.combine(datetime.date.today(), current_time) - datetime.datetime.combine(datetime.date.today(), diff_time)
+            # print("Time diff: " + str(overall_time_diff))
+            overall_time_obj = (datetime.datetime.min + overall_time_diff).time()
+            print("Time diff: {:02d}:{:02d}:{:02d}".format(overall_time_obj.minute, overall_time_obj.second, overall_time_obj.microsecond))
+
+            # Don't show time diffs on lap 1, to mirror game behavior
+            if player1.currentLap != 1:
+                diff_min = minutes
+                diff_sec = seconds
+                diff_milli = milliseconds
+
             # Increment lap count
             py_lap_count = int(player1.currentLap)
             print("Lap:", player1.currentLap)
+
         # If player state == startline and the lap counter is greater than 0, reset it.
         if player1.state == 1 and py_lap_count > 0:
-            print("Started new race.")
+            print("Started new race, reset lap count to 0.")
             py_lap_count = 0

@@ -6,7 +6,7 @@ if __name__ == "__main__":
     DME.hook()
 
     # Instantiate player ptr on py side
-    player1 = Player(0, 0x80532d80)
+    player1 = Player(0, TE_PLAYER_PTR)
 
     # Test get
     print("Character ID:", player1.character)
