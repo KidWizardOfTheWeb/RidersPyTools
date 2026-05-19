@@ -1,0 +1,14 @@
+f32 baseTopSpeed;
+f32 baseAccel;
+f32 topSpeed;
+f32 tier1Accel;
+f32 tier2Accel;
+f32 tier3Accel;
+f32 offroadSpeedCap;
+s32 maxAir;
+s32 airDrain;
+s32 driftCost;
+s32 boostCost;
+s32 tornadoCost;
+f32 driftDashSpeed;
+f32 boostSpeed;

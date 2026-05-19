@@ -1,0 +1,16 @@
+u32 *timeSinceLastInput;
+u32 unk4;
+Flag<Buttons> holdFaceButtons;
+Flag<Buttons> toggleFaceButtons;
+fillerData<0x8> filler;
+s8 leftStickHorizontal;
+s8 leftStickVertical;
+fillerData<0x2> filler2;
+s8 rightStickHorizontal;
+s8 rightStickVertical;
+u8 port;
+fillerData<0x5> filler3;
+u32 initStatus2;
+bool initStatus;
+bool unk29;
+fillerData<0x6> filler4;

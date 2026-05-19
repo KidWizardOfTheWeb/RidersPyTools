@@ -1,11 +1,11 @@
 import dataclasses
 
-from Constants import GameIDs
+from include.Constants import GameIDs
 from enum import Enum
 # from src.RidersPyTools_KC.Constants import GameVersion
 
 # Starts as vanilla unless written otherwise
-GAME_VERSION = GameIDs.SONIC_RIDERS_ID
+GAME_VERSION = GameIDs.SONIC_RIDERS_TE_ID
 
 # Main game mode ID, see GameModes.
 CURRENT_GAME_MODE = None

@@ -27,15 +27,72 @@ and return that.
 Writing would be similar, but taking an extra parameter for data to write to the offset given.
 """
 import dolphin_memory_engine as DME
-from Constants import *
-from GameState import *
-from Structs import Controller
+from include.Controller import Controller
+from include.GenericData import GenericData
+from include.GearStats import GearStats
+from include.Constants import *
 from GameState import GAME_VERSION
-from Constants import GameIDs
-import OffsetAttr
-from OffsetAttr import OffsetAttr
 
-class Player(object):
+INIT_STATE = True
+
+class Player:
+    def __getattr__(self, name):
+        global INIT_STATE
+
+        if INIT_STATE:
+            return None
+
+        # This gets our types and offsets (users cannot get these, they are protected from frontend).
+        type_to_read = vars(self.__getattribute__(name))["_datatype"]
+        offset_to_read = vars(self.__getattribute__(name))["_offset"]
+
+        # Check our types, read from game, return value if found
+        if 'READ_FROM_DME' in name:
+            try:
+                value_read = None
+                if type_to_read == u8 or type_to_read == s8 or type_to_read == Bool:
+                    value_read = DME.read_byte(offset_to_read)
+                if type_to_read == u16 or type_to_read == s16:
+                    value_read = DME.read_byte(offset_to_read)
+                if type_to_read == u32 or type_to_read == s32:
+                    value_read = DME.read_word(offset_to_read)
+                # if type_to_read == f32:
+                #     value_read = DME.read_float(offset_to_read)
+                return value_read
+            except RuntimeError as e:
+                print("RuntimeError: DME is " + str(e) + ". Failed to return value.")
+        return vars(self.__getattribute__(name))
+    def __setattr__(self, name, value):
+        global INIT_STATE
+
+        # On startup, this allows everything to be assigned to the player object.
+        # We NEED this for init ONLY.
+        # Once every struct variable is done, SET INIT_STATE = False.
+        # Once that is done, this will retrieve data from DME instead of setting the attribute's value.
+        if INIT_STATE:
+            super().__setattr__(name, value)
+            return
+        # Use this function for GenericData value assignment that isn't setting equal to a new object instance (that's handled in their own classes)
+
+        # This gets our types and offsets (users cannot get these, they are protected from frontend).
+        # check_DME_value = vars(self.__getattribute__(name))
+        type_to_write = vars(self.__getattribute__(name))["_datatype"]
+        offset_to_write = vars(self.__getattribute__(name))["_offset"]
+
+
+        # Check our types, read from game, return value if found
+        try:
+            if type_to_write == u8 or type_to_write == s8 or type_to_write == Bool:
+                DME.write_byte(offset_to_write, value)
+            if type_to_write == u16 or type_to_write == s16:
+                DME.write_byte(offset_to_write, value)
+            if type_to_write == u32 or type_to_write == s32:
+                DME.write_word(offset_to_write, value)
+            # if type_to_write == f32:
+            #     DME.write_float(offset_to_write, value)
+        except RuntimeError as e:
+            print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
+        return
     def __init__(self, playerNum):
         # TODO: If TE, use the map file instead of this for ptr
         match GAME_VERSION:
@@ -62,22 +119,47 @@ class Player(object):
         pass
         # Inputs are always defined on game load, at least for P1.
         # The input ptr is always at the start of the playerPtr struct, so just read word from here and pass the struct ID
+        ptr_start_addr = self.playerPtr
 
-        # Controller * input;
-        # ptr_start_addr=DME.read_word(self.playerPtr)
-        self.input = Controller(0x0, ptr)
+        # Go to pointer for controls, starts at offset 0
+        self.input = Controller(DME.follow_pointers(ptr_start_addr, [0]), ptr)
+        self.tornadoInvulnerabilityTimer = GenericData(ptr_start_addr + 0x4, u8)
 
-        self.tornadoInvulnerabilityTimer = OffsetAttr(0x4, u8)
+        self.character = GenericData(ptr_start_addr + 0xBA, u8)
+        self.extremeGear = GenericData(ptr_start_addr + 0xBB, u8)
+
+        self.currentAnimationID = GenericData(ptr_start_addr + 0x764, u32)
+
+        # GearStats[3] -> index per level
+        self.gearStats = [GearStats(ptr_start_addr + 0x8DC, u32), GearStats(ptr_start_addr + 0x914, u32), GearStats(ptr_start_addr + 0x94C, u32)]
+        self.currentAir = GenericData(ptr_start_addr + 0x984, u32)
+        self.changeInAir_gain = GenericData(ptr_start_addr + 0x988, u32)
+        self.changeInAir_loss = GenericData(ptr_start_addr + 0x98C, u32)
+
+        # TODO: Define special flags for bitfield.
+        # self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
+        self.rings = GenericData(ptr_start_addr + 0xB98, u32)
+        self.level = GenericData(ptr_start_addr + 0x102E, u8)
+
+        # DO NOT TOUCH, REQUIRED FOR INIT/RUNTIME TO WORK
+        global INIT_STATE
+        INIT_STATE = False
 
 if __name__ == '__main__':
-    # Test init
-    new_player_obj = Player(0)
+    # Test script example
+    DME.hook()
+    player1 = Player(0)
 
     # Test get
-    print(new_player_obj.input.timeSinceLastInput)
-    print(new_player_obj.input.port)
+    print(player1.input.timeSinceLastInput)
+    print(player1.input.port)
 
-    # Test set
-    new_player_obj.input.port = 1
+    print("Rings before:", player1.rings)
 
-    print("Pause")
+    player1.rings = 100
+
+    print("Rings after:", player1.rings)
+
+    # player1.currentAnimationID = 62
+    
+    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(250.0)

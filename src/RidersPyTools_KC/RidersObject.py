@@ -2,10 +2,6 @@
 Contains all memory addresses from map/vanilla addresses fallback
 """
 
-import dolphin_memory_engine
-from Constants import *
-from GameState import *
-from src.RidersPyTools_KC.GameState import GAME_VERSION
 
 class RidersObject(object):
     def __init__(self):

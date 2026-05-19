@@ -1,6 +1,6 @@
 import dolphin_memory_engine
 import time
-from Constants import GameIDs
+from src.RidersPyTools_KC.include.Constants import GameIDs
 import GameState
 
 # def dolphin_connection_proc():
