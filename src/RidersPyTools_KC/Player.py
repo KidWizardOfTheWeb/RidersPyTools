@@ -29,11 +29,11 @@ Writing would be similar, but taking an extra parameter for data to write to the
 import time
 
 import dolphin_memory_engine as DME
-from include.Controller import Controller
-from include.GenericData import GenericData
-from include.GearStats import GearStats
-from include.Constants import *
-from GameState import GAME_VERSION
+from .include.Controller import Controller
+from .include.GenericData import GenericData
+from .include.GearStats import GearStats
+from .include.Constants import *
+from .GameState import GAME_VERSION
 
 INIT_STATE = True
 
@@ -172,36 +172,3 @@ class Player:
         # DO NOT TOUCH, REQUIRED FOR INIT/RUNTIME TO WORK
         global INIT_STATE
         INIT_STATE = False
-
-if __name__ == '__main__':
-    # Test script example
-
-    # Hook DME
-    DME.hook()
-
-    # Instantiate player ptr on py side
-    player1 = Player(0)
-
-    # Test get
-    print("Character ID:", player1.character)
-    print("Extreme Gear ID:", player1.extremeGear)
-    print("Character archetype ID:", player1.characterArchetype)
-    print("Current lap:", player1.currentLap)
-    print("Player State:", player1.state)
-
-    # Let's adjust their rings!
-    print("Changing rings.")
-    print("Rings before change:", player1.rings)
-
-    # Set the ring value on the player
-    player1.rings = 100
-    print("Rings after change:", player1.rings)
-
-    # Play an animation for fun!
-    player1.currentAnimationID = 62
-
-    # Do a pause for a second since scripting does not frame match dolphin
-    time.sleep(1)
-
-    # Set boost speed
-    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(300.0)

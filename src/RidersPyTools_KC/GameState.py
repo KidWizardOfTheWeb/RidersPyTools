@@ -1,6 +1,6 @@
 import dataclasses
 
-from include.Constants import GameIDs
+from .include.Constants import GameIDs
 from enum import Enum
 # from src.RidersPyTools_KC.Constants import GameVersion
 
