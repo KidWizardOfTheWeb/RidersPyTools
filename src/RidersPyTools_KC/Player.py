@@ -26,6 +26,8 @@ and return that.
 
 Writing would be similar, but taking an extra parameter for data to write to the offset given.
 """
+import time
+
 import dolphin_memory_engine as DME
 from include.Controller import Controller
 from include.GenericData import GenericData
@@ -93,29 +95,34 @@ class Player:
         except RuntimeError as e:
             print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
         return
-    def __init__(self, playerNum):
+    def __init__(self, playerNum, playerPtr=None):
         # TODO: If TE, use the map file instead of this for ptr
-        match GAME_VERSION:
-            # Vanilla based IDs for vanilla, DX, FT
-            case GameIDs.SONIC_RIDERS_ID:
-                self.playerPtr = VANILLA_PLAYER_PTR + (0x1080 * playerNum)
-            case GameIDs.SONIC_RIDERS_DX_ID:
-                self.playerPtr = VANILLA_PLAYER_PTR + (0x1080 * playerNum)
-            case GameIDs.SONIC_RIDERS_FT_ID:
-                self.playerPtr = VANILLA_PLAYER_PTR + (0x1080 * playerNum)
+        # If a player pointer is passed in, use that instead and skip the match.
+        # This is especially helpful for when TE builds change pointers and the ptr hasn't been updated in the constants yet.
+        if playerPtr:
+            self.playerPtr = playerPtr + (0x1080 * playerNum)
+        else:
+            match GAME_VERSION:
+                # Vanilla based IDs for vanilla, DX, FT
+                case GameIDs.SONIC_RIDERS_ID:
+                    self.playerPtr = VANILLA_PLAYER_PTR + (0x1080 * playerNum)
+                case GameIDs.SONIC_RIDERS_DX_ID:
+                    self.playerPtr = VANILLA_PLAYER_PTR + (0x1080 * playerNum)
+                case GameIDs.SONIC_RIDERS_FT_ID:
+                    self.playerPtr = VANILLA_PLAYER_PTR + (0x1080 * playerNum)
 
-            # TE is special, as the game is a shiftable dol.
-            # I'd suggest using the map file to figure out what this is supposed to be,
-            # Or having a user enter it manually if no map is passed in.
-            case GameIDs.SONIC_RIDERS_TE_ID:
-                self.playerPtr = TE_PLAYER_PTR + (0x1080 * playerNum)
+                # TE is special, as the game is a shiftable dol.
+                # I'd suggest using the map file to figure out what this is supposed to be,
+                # Or having a user enter it manually if no map is passed in.
+                case GameIDs.SONIC_RIDERS_TE_ID:
+                    self.playerPtr = TE_PLAYER_PTR + (0x1080 * playerNum)
 
-            # ZG has dynamic player ptrs, this is not very reliable as of now.
-            case GameIDs.SONIC_RIDERS_ZG_ID:
-                self.playerPtr = ZG_PLAYER_PTR + (0x1120 * playerNum)
+                # ZG has dynamic player ptrs, this is not very reliable as of now.
+                case GameIDs.SONIC_RIDERS_ZG_ID:
+                    self.playerPtr = ZG_PLAYER_PTR + (0x1120 * playerNum)
 
-            case _:
-                pass
+                case _:
+                    pass
         pass
         # Inputs are always defined on game load, at least for P1.
         # The input ptr is always at the start of the playerPtr struct, so just read word from here and pass the struct ID
@@ -127,6 +134,12 @@ class Player:
 
         self.character = GenericData(ptr_start_addr + 0xBA, u8)
         self.extremeGear = GenericData(ptr_start_addr + 0xBB, u8)
+        self.x = GenericData(ptr_start_addr + 0x1E4, f32)
+        self.y = GenericData(ptr_start_addr + 0x1E8, f32)
+        self.z = GenericData(ptr_start_addr + 0x1EC, f32)
+        self.verticalRotation = GenericData(ptr_start_addr + 0x1F0, f32)
+        self.horizontalRotation = GenericData(ptr_start_addr + 0x1F4, f32)
+        self.rotationRoll = GenericData(ptr_start_addr + 0x1F8, f32)
 
         self.currentAnimationID = GenericData(ptr_start_addr + 0x764, u32)
 
@@ -139,7 +152,22 @@ class Player:
         # TODO: Define special flags for bitfield.
         # self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
         self.rings = GenericData(ptr_start_addr + 0xB98, u32)
+        self.currentLap = GenericData(ptr_start_addr + 0x102A, u8)
+        self.previousLap = GenericData(ptr_start_addr + 0x102B, u8)
+        self.placement_counter = GenericData(ptr_start_addr + 0x102C, u8)
+        self.placement = GenericData(ptr_start_addr + 0x102D, u8)
         self.level = GenericData(ptr_start_addr + 0x102E, u8)
+        self.subState = GenericData(ptr_start_addr + 0x102F, u8)
+
+
+        self.state = GenericData(ptr_start_addr + 0x1034, u8)
+        self.previousState = GenericData(ptr_start_addr + 0x1034, u8)
+
+        self.qteState = GenericData(ptr_start_addr + 0x1043, u8)
+        self.unk1044 = GenericData(ptr_start_addr + 0x1044, u8)
+
+        # TE SPECIFIC, all other builds check "archetype" with character checks instead
+        self.characterArchetype = GenericData(ptr_start_addr + 0x107C, u8)
 
         # DO NOT TOUCH, REQUIRED FOR INIT/RUNTIME TO WORK
         global INIT_STATE
@@ -147,19 +175,33 @@ class Player:
 
 if __name__ == '__main__':
     # Test script example
+
+    # Hook DME
     DME.hook()
+
+    # Instantiate player ptr on py side
     player1 = Player(0)
 
     # Test get
-    print(player1.input.timeSinceLastInput)
-    print(player1.input.port)
+    print("Character ID:", player1.character)
+    print("Extreme Gear ID:", player1.extremeGear)
+    print("Character archetype ID:", player1.characterArchetype)
+    print("Current lap:", player1.currentLap)
+    print("Player State:", player1.state)
 
-    print("Rings before:", player1.rings)
+    # Let's adjust their rings!
+    print("Changing rings.")
+    print("Rings before change:", player1.rings)
 
+    # Set the ring value on the player
     player1.rings = 100
+    print("Rings after change:", player1.rings)
 
-    print("Rings after:", player1.rings)
+    # Play an animation for fun!
+    player1.currentAnimationID = 62
 
-    # player1.currentAnimationID = 62
-    
-    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(250.0)
+    # Do a pause for a second since scripting does not frame match dolphin
+    time.sleep(1)
+
+    # Set boost speed
+    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(300.0)
