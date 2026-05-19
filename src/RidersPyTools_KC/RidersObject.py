@@ -28,10 +28,10 @@ class RidersObject:
                     value_read = DME.read_byte(offset_to_read)
                 if type_to_read == u16 or type_to_read == s16:
                     value_read = DME.read_byte(offset_to_read)
-                if type_to_read == u32 or type_to_read == s32:
+                if type_to_read == u32 or type_to_read == s32 or type_to_read == vu32:
                     value_read = DME.read_word(offset_to_read)
-                # if type_to_read == f32:
-                #     value_read = DME.read_float(offset_to_read)
+                if type_to_read == f32:
+                    value_read = DME.read_float(offset_to_read)
                 return value_read
             except RuntimeError as e:
                 print("RuntimeError: DME is " + str(e) + ". Failed to return value.")
@@ -59,25 +59,30 @@ class RidersObject:
                 DME.write_byte(offset_to_write, value)
             if type_to_write == u16 or type_to_write == s16:
                 DME.write_byte(offset_to_write, value)
-            if type_to_write == u32 or type_to_write == s32:
+            if type_to_write == u32 or type_to_write == s32 or type_to_write == vu32:
                 DME.write_word(offset_to_write, value)
-            # if type_to_write == f32:
-            #     DME.write_float(offset_to_write, value)
+            if type_to_write == f32:
+                DME.write_float(offset_to_write, value)
         except RuntimeError as e:
             print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
         return
-    def __init__(self, addr=None):
+    def __init__(self, stageTimerAddr=None, currentStageAddr=None):
         # Find a way to define literally EVERY SYMBOL here.
         # Not easy, but most are defined. Some are custom with pointers and structs. Good luck.
 
-        # This is a hack that allows me to change where the stageTimer address is.
+        # This is a hack that allows me to change where the addresses are.
         # This makes it easier to find while we're testing TE.
         # If no address found, use vanilla.
-        # If you want this for TE, send in addr 0x8053C480
-        if not addr:
-            addr = 0x80612b40
-        self.stageTimer = [GenericData(addr, u8), GenericData(addr + 0x1, u8),
-                           GenericData(addr + 0x2, u8)]
+        # If you want this for TE, send in stageTimerAddr 0x8053C480
+        # TE 2.4.6.1 currentStageAddr 0x8053C2E8
+        if not stageTimerAddr:
+            stageTimerAddr = 0x80612b40
+        if not currentStageAddr:
+            currentStageAddr = 0x806129A8
+        self.stageTimer = [GenericData(stageTimerAddr, u8), GenericData(stageTimerAddr + 0x1, u8),
+                           GenericData(stageTimerAddr + 0x2, u8)]
+        self.currentStage = GenericData(currentStageAddr, vu32)
+
         global INIT_STATE
         INIT_STATE = False
         pass

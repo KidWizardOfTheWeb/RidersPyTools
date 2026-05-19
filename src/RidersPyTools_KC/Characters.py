@@ -28,6 +28,7 @@ CHR_ID_TO_NAME = {
     CHR_CREAM: "Cream",
     CHR_ROUGE: "Rouge",
     CHR_SHADOW: "Shadow",
+    CHR_SUPER_SONIC: "Super Sonic",
     CHR_NIGHTS: "NiGHTS",
     CHR_AIAI: "AiAi",
     CHR_ULALA: "Ulala",

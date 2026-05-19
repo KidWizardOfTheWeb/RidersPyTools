@@ -31,10 +31,10 @@ class Player:
                     value_read = DME.read_byte(offset_to_read)
                 if type_to_read == u16 or type_to_read == s16:
                     value_read = DME.read_byte(offset_to_read)
-                if type_to_read == u32 or type_to_read == s32:
+                if type_to_read == u32 or type_to_read == s32 or type_to_read == vu32:
                     value_read = DME.read_word(offset_to_read)
-                # if type_to_read == f32:
-                #     value_read = DME.read_float(offset_to_read)
+                if type_to_read == f32:
+                    value_read = DME.read_float(offset_to_read)
                 return value_read
             except RuntimeError as e:
                 print("RuntimeError: DME is " + str(e) + ". Failed to return value.")
@@ -63,10 +63,10 @@ class Player:
                 DME.write_byte(offset_to_write, value)
             if type_to_write == u16 or type_to_write == s16:
                 DME.write_byte(offset_to_write, value)
-            if type_to_write == u32 or type_to_write == s32:
+            if type_to_write == u32 or type_to_write == s32 or type_to_write == vu32:
                 DME.write_word(offset_to_write, value)
-            # if type_to_write == f32:
-            #     DME.write_float(offset_to_write, value)
+            if type_to_write == f32:
+                DME.write_float(offset_to_write, value)
         except RuntimeError as e:
             print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
         return
@@ -95,7 +95,6 @@ class Player:
                 # ZG has dynamic player ptrs, this is not very reliable as of now.
                 case GameIDs.SONIC_RIDERS_ZG_ID:
                     self.playerPtr = ZG_PLAYER_PTR + (0x1120 * playerNum)
-
                 case _:
                     pass
         pass

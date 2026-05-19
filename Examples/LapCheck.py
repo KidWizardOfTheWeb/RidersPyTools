@@ -1,3 +1,7 @@
+from src.RidersPyTools_KC.Characters import CHR_ID_TO_NAME
+from src.RidersPyTools_KC.Gears import GEAR_ID_TO_NAME
+from src.RidersPyTools_KC.Stages import STAGE_ID_TO_NAME
+from src.RidersPyTools_KC.Archetypes import ARCH_ID_TO_NAME
 from src.RidersPyTools_KC.Player import Player, DME
 from src.RidersPyTools_KC.RidersObject import RidersObject
 from src.RidersPyTools_KC.include.Constants import *
@@ -23,14 +27,34 @@ if __name__ == "__main__":
 
     # Instantiate the stage timer for 2.4.6.1
     # (at the time of writing, this is the only data in here)
-    ridersObject1 = RidersObject(addr=0x8053C480)
+    ridersObject1 = RidersObject(stageTimerAddr=0x8053C480, currentStageAddr=0x8053C2E8)
 
     # Set a global lap counter as a lock mechanism
     # Get current lap count (we do this so this counts even if they are past init)
     # MAKE SURE TO TYPECAST TO GET THE INT VALUE
     py_lap_count = int(player1.currentLap)
 
-    print("Lap counter started on lap:", py_lap_count)
+    print("Current stage ID:", STAGE_ID_TO_NAME[int(ridersObject1.currentStage)])
+
+    # Get these values in human-readable form, else give the ID only
+    try:
+        print("Character:", CHR_ID_TO_NAME[int(player1.character)])
+    except KeyError:
+        print("Character ID:", int(player1.character))
+
+    try:
+        print("Extreme Gear:", GEAR_ID_TO_NAME[int(player1.extremeGear)])
+    except KeyError:
+        print("Extreme Gear ID:", int(player1.extremeGear))
+
+    try:
+        print("Character archetype:", ARCH_ID_TO_NAME[int(player1.characterArchetype)])
+    except KeyError:
+        print("Character archetype ID:", int(player1.characterArchetype))
+
+    print("\nLap counter started on lap:", py_lap_count)
+    print("Current time: {:02d}:{:02d}:{:02d}".format(int(ridersObject1.stageTimer[2]), int(ridersObject1.stageTimer[1]), int(ridersObject1.stageTimer[0])))
+
 
     # Use in-game lap count to check updates.
     while True:

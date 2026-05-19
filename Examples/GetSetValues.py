@@ -1,3 +1,6 @@
+from src.RidersPyTools_KC.Characters import CHR_ID_TO_NAME
+from src.RidersPyTools_KC.Gears import GEAR_ID_TO_NAME
+from src.RidersPyTools_KC.Archetypes import ARCH_ID_TO_NAME
 from src.RidersPyTools_KC.Player import Player, DME
 from src.RidersPyTools_KC.include.Constants import *
 import time
@@ -8,10 +11,22 @@ if __name__ == "__main__":
     # Instantiate player ptr on py side
     player1 = Player(0, TE_PLAYER_PTR)
 
-    # Test get
-    print("Character ID:", player1.character)
-    print("Extreme Gear ID:", player1.extremeGear)
-    print("Character archetype ID:", player1.characterArchetype)
+    # Test get values
+    try:
+        print("Character:", CHR_ID_TO_NAME[int(player1.character)])
+    except KeyError:
+        print("Character ID:", int(player1.character))
+
+    try:
+        print("Extreme Gear:", GEAR_ID_TO_NAME[int(player1.extremeGear)])
+    except KeyError:
+        print("Extreme Gear ID:", int(player1.extremeGear))
+
+    try:
+        print("Character archetype:", ARCH_ID_TO_NAME[int(player1.characterArchetype)])
+    except KeyError:
+        print("Character archetype ID:", int(player1.characterArchetype))
+
     print("Current lap:", player1.currentLap)
     print("Player State:", player1.state)
 
@@ -27,7 +42,7 @@ if __name__ == "__main__":
     player1.currentAnimationID = 62
 
     # Do a pause for a second since scripting does not frame match dolphin
-    time.sleep(1)
+    time.sleep(0.05)
 
     # Set boost speed
-    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(250.0)
+    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(300.0)
