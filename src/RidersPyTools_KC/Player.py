@@ -71,6 +71,8 @@ class Player:
             print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
         return
     def __init__(self, playerNum, playerPtr=None):
+        global INIT_STATE
+        INIT_STATE = True
         # TODO: If TE, use the map file instead of this for ptr
         # If a player pointer is passed in, use that instead and skip the match.
         # This is especially helpful for when TE builds change pointers and the ptr hasn't been updated in the constants yet.
@@ -150,5 +152,4 @@ class Player:
         self.characterArchetype = GenericData(ptr_start_addr + 0x107C, u8)
 
         # DO NOT TOUCH, REQUIRED FOR INIT/RUNTIME TO WORK
-        global INIT_STATE
         INIT_STATE = False

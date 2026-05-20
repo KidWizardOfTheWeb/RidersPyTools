@@ -67,6 +67,8 @@ class RidersObject:
             print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
         return
     def __init__(self, stageTimerAddr=None, currentStageAddr=None):
+        global INIT_STATE
+        INIT_STATE = True
         # Find a way to define literally EVERY SYMBOL here.
         # Not easy, but most are defined. Some are custom with pointers and structs. Good luck.
 
@@ -83,6 +85,5 @@ class RidersObject:
                            GenericData(stageTimerAddr + 0x2, u8)]
         self.currentStage = GenericData(currentStageAddr, vu32)
 
-        global INIT_STATE
         INIT_STATE = False
         pass
