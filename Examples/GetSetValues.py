@@ -13,17 +13,17 @@ if __name__ == "__main__":
 
     # Test get values
     try:
-        print("Character:", CHR_ID_TO_NAME[int(player1.character)])
+        print("Character:", CHR_ID_TO_NAME[player1.character])
     except KeyError:
         print("Character ID:", int(player1.character))
 
     try:
-        print("Extreme Gear:", GEAR_ID_TO_NAME[int(player1.extremeGear)])
+        print("Extreme Gear:", GEAR_ID_TO_NAME[player1.extremeGear])
     except KeyError:
         print("Extreme Gear ID:", int(player1.extremeGear))
 
     try:
-        print("Character archetype:", ARCH_ID_TO_NAME[int(player1.characterArchetype)])
+        print("Character archetype:", ARCH_ID_TO_NAME[player1.characterArchetype])
     except KeyError:
         print("Character archetype ID:", int(player1.characterArchetype))
 

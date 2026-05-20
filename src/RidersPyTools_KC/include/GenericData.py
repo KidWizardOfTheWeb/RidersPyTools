@@ -65,10 +65,58 @@ class GenericData(OffsetAttr):
         return getattr(self, "READ_FROM_DME") >= other
 
     def __int__(self):
-        return getattr(self, "READ_FROM_DME")
+        return int(getattr(self, "READ_FROM_DME"))
 
     def __repr__(self):
         return str(getattr(self, "READ_FROM_DME"))
+
+    def __hash__(self):
+        return hash(getattr(self, "READ_FROM_DME"))
+
+    def __add__(self, other):
+        return getattr(self, "READ_FROM_DME") + other
+
+    def __sub__(self, other):
+        return getattr(self, "READ_FROM_DME") - other
+
+    def __mul__(self, other):
+        return getattr(self, "READ_FROM_DME") * other
+
+    def __truediv__(self, other):
+        return getattr(self, "READ_FROM_DME") / other
+
+    def __floordiv__(self, other):
+        return getattr(self, "READ_FROM_DME") // other
+
+    def __mod__(self, other):
+        return getattr(self, "READ_FROM_DME") % other
+
+    def __pow__(self, power):
+        return getattr(self, "READ_FROM_DME") ** power
+
+    def __lshift__(self, other):
+        return getattr(self, "READ_FROM_DME") << other
+
+    def __rshift__(self, other):
+        return getattr(self, "READ_FROM_DME") >> other
+
+    def __invert__(self):
+        return ~getattr(self, "READ_FROM_DME")
+
+    def __and__(self, other):
+        return getattr(self, "READ_FROM_DME") & other
+
+    def __or__(self, other):
+        return getattr(self, "READ_FROM_DME") | other
+
+    def __xor__(self, other):
+        return getattr(self, "READ_FROM_DME") ^ other
+
+    def __abs__(self):
+        return abs(getattr(self, "READ_FROM_DME"))
+
+    def __neg__(self):
+        return -getattr(self, "READ_FROM_DME")
 
     def __init__(self, addr, datatype):
         super().__init__(addr, datatype)
