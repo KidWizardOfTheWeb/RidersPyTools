@@ -125,6 +125,9 @@ class Player:
         self.changeInAir_gain = GenericData(ptr_start_addr + 0x988, u32)
         self.changeInAir_loss = GenericData(ptr_start_addr + 0x98C, u32)
 
+        self.speed = GenericData(ptr_start_addr + 0xAAC, f32)
+        self.speedAsInt = GenericData(ptr_start_addr + 0xABC, u32)
+
         # TODO: Define special flags for bitfield.
         # self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
         self.rings = GenericData(ptr_start_addr + 0xB98, u32)

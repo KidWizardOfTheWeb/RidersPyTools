@@ -47,69 +47,112 @@ class GenericData(OffsetAttr):
 
     # Define generics as int comparisons, since most of this is int based.
     def __lt__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") < other
 
     def __le__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") <= other
 
     def __eq__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") == other
 
     def __ne__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") != other
 
     def __gt__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") > other
 
     def __ge__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") >= other
 
     def __int__(self):
         return int(getattr(self, "READ_FROM_DME"))
 
+    def __float__(self):
+        return float(getattr(self, "READ_FROM_DME"))
+
     def __repr__(self):
         return str(getattr(self, "READ_FROM_DME"))
+
+    def __str__(self):
+        return str(getattr(self, "READ_FROM_DME"))
+
+    def __format__(self, format_spec):
+        return format(getattr(self, "READ_FROM_DME"), format_spec)
 
     def __hash__(self):
         return hash(getattr(self, "READ_FROM_DME"))
 
     def __add__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") + other
 
     def __sub__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") - other
 
     def __mul__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") * other
 
     def __truediv__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") / other
 
     def __floordiv__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") // other
 
     def __mod__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") % other
 
     def __pow__(self, power):
         return getattr(self, "READ_FROM_DME") ** power
 
     def __lshift__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") << other
 
     def __rshift__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") >> other
 
     def __invert__(self):
         return ~getattr(self, "READ_FROM_DME")
 
     def __and__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") & other
 
     def __or__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") | other
 
     def __xor__(self, other):
+        if isinstance(other, GenericData):
+            other = getattr(other, "READ_FROM_DME")
         return getattr(self, "READ_FROM_DME") ^ other
 
     def __abs__(self):

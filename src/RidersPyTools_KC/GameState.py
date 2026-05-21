@@ -1,7 +1,7 @@
 import dataclasses
 
 from .include.Constants import GameIDs
-from enum import Enum
+from enum import Enum, IntEnum
 # from src.RidersPyTools_KC.Constants import GameVersion
 
 # Starts as vanilla unless written otherwise
@@ -29,16 +29,40 @@ class GameModes:
     UNK_MODE = 900,  # Complete mystery to this day...
     CUTSCENE_MODE = 1000
 
-class ExitMethod(Enum):
+MODE_ID_TO_NAME = {
+    GameModes.TITLE_SCREEN: "Title Screen",
+    GameModes.STORY_MODE: "Story Mode",
+    GameModes.MISSION_MODE: "Mission Mode",
+    GameModes.TAG_MODE: "Tag Mode",
+    GameModes.EMERALD_CHASE: "Emerald Chase",
+    GameModes.BATTLE_MODE: "Battle Mode",
+    GameModes.TIME_TRIAL: "Time Trial",
+    GameModes.FREE_RACE: "Free Race",
+    GameModes.WORLD_GRAND_PRIX: "World Grand Prix",
+    GameModes.UNK_MODE: "Unknown Mode",
+    GameModes.CUTSCENE_MODE: "In a Cutscene"
+}
+ALL_MODES = list(MODE_ID_TO_NAME.keys())
+
+class ExitMethod(IntEnum):
     Quit = 1,
     Retry = 2
 
-class RaceState(Enum):
+class RaceState(IntEnum):
     Init = 0,
     OpeningCutscene = 1,
     Countdown = 2,
     Active = 3,
     End = 4
+
+RACESTATE_ID_TO_NAME = {
+    RaceState.Init: "Initializing race",
+    RaceState.OpeningCutscene: "Starting race",
+    RaceState.Countdown: "Race Countdown",
+    RaceState.Active: "In an active race",
+    RaceState.End: "Race finished"
+}
+ALL_RACESTATES = list(RACESTATE_ID_TO_NAME.keys())
 
 # TODO: Map this to data addresses properly so that modifying an instance of the rules will modify the game memory
 @dataclasses.dataclass

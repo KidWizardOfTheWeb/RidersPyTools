@@ -7,8 +7,18 @@ from .include.Controller import Controller
 from .include.GenericData import GenericData
 from .include.GearStats import GearStats
 from .include.Constants import *
-from .GameState import GAME_VERSION
+from .GameState import GAME_VERSION, RACESTATE_ID_TO_NAME, ALL_RACESTATES, RaceState
 INIT_STATE = True
+
+# Note: these are vanilla addresses as default
+default_general_addresses = {
+    "CurrentGameMode": 0x806129A0,
+    "geGame_ModeDetail": 0x806129A4,
+    "CurrentStage": 0x806129A8,
+    "ExitMethod": 0x806129C0,
+    "StageTimer": 0x80612B40,
+}
+
 class RidersObject:
     def __getattr__(self, name):
         global INIT_STATE
@@ -66,7 +76,7 @@ class RidersObject:
         except RuntimeError as e:
             print("RuntimeError: DME is " + str(e) + ". Failed to write new value.")
         return
-    def __init__(self, stageTimerAddr=None, currentStageAddr=None):
+    def __init__(self, replacement_values: dict = None):
         global INIT_STATE
         INIT_STATE = True
         # Find a way to define literally EVERY SYMBOL here.
@@ -77,13 +87,27 @@ class RidersObject:
         # If no address found, use vanilla.
         # If you want this for TE, send in stageTimerAddr 0x8053C480
         # TE 2.4.6.1 currentStageAddr 0x8053C2E8
-        if not stageTimerAddr:
-            stageTimerAddr = 0x80612b40
-        if not currentStageAddr:
-            currentStageAddr = 0x806129A8
-        self.stageTimer = [GenericData(stageTimerAddr, u8), GenericData(stageTimerAddr + 0x1, u8),
-                           GenericData(stageTimerAddr + 0x2, u8)]
-        self.currentStage = GenericData(currentStageAddr, vu32)
+
+        addresses_to_use = default_general_addresses | replacement_values
+
+        self.currentMode = GenericData(addresses_to_use["CurrentGameMode"], vu32)
+        self.gameModeDetail = GenericData(addresses_to_use["geGame_ModeDetail"], vu32)
+        self.currentStage = GenericData(addresses_to_use["CurrentStage"], vu32)
+        self.exitMethod = GenericData(addresses_to_use["ExitMethod"], u32)
+        self.stageTimer = [GenericData(addresses_to_use["StageTimer"], u8),
+                           GenericData(addresses_to_use["StageTimer"] + 0x1, u8),
+                           GenericData(addresses_to_use["StageTimer"] + 0x2, u8)]
 
         INIT_STATE = False
         pass
+
+    def get_race_state(self, return_text=False):
+        if return_text:
+            return RACESTATE_ID_TO_NAME[RaceState(self.gameModeDetail - self.currentMode)]
+        return RaceState(self.gameModeDetail - self.currentMode)
+
+    def get_current_race_time(self):
+        minutes = (self.stageTimer[2])
+        seconds = (self.stageTimer[1])
+        milliseconds = (self.stageTimer[0])
+        return "{:02d}:{:02d}:{:02d}".format(minutes, seconds, milliseconds)
