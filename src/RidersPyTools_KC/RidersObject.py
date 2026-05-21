@@ -12,6 +12,7 @@ INIT_STATE = True
 
 # Note: these are vanilla addresses as default
 default_general_addresses = {
+    "gameID": 0x80000000,
     "CurrentGameMode": 0x806129A0,
     "geGame_ModeDetail": 0x806129A4,
     "CurrentStage": 0x806129A8,
@@ -42,6 +43,9 @@ class RidersObject:
                     value_read = DME.read_word(offset_to_read)
                 if type_to_read == f32:
                     value_read = DME.read_float(offset_to_read)
+                if value_read is None:
+                    # No types were valid, read bytes instead
+                    value_read = DME.read_bytes(offset_to_read, type_to_read)
                 return value_read
             except RuntimeError as e:
                 print("RuntimeError: DME is " + str(e) + ". Failed to return value.")
@@ -89,6 +93,9 @@ class RidersObject:
         # TE 2.4.6.1 currentStageAddr 0x8053C2E8
 
         addresses_to_use = default_general_addresses | replacement_values
+
+        # This is 6 bytes long.
+        self.gameID = GenericData(addresses_to_use["gameID"], 0x6)
 
         self.currentMode = GenericData(addresses_to_use["CurrentGameMode"], vu32)
         self.gameModeDetail = GenericData(addresses_to_use["geGame_ModeDetail"], vu32)

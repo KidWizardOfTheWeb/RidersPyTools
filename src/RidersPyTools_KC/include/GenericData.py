@@ -20,6 +20,9 @@ class GenericData(OffsetAttr):
                     value_read = DME.read_word(offset_to_read)
                 if type_to_read == f32:
                     value_read = DME.read_float(offset_to_read)
+                if value_read is None:
+                    # No types were valid, read bytes instead
+                    value_read = DME.read_bytes(offset_to_read, type_to_read)
                 return value_read
             except RuntimeError as e:
                 print("RuntimeError: DME is " + str(e) + ". Failed to return value.")
@@ -160,6 +163,9 @@ class GenericData(OffsetAttr):
 
     def __neg__(self):
         return -getattr(self, "READ_FROM_DME")
+
+    def __bytes__(self):
+        return bytes(getattr(self, "READ_FROM_DME"))
 
     def __init__(self, addr, datatype):
         super().__init__(addr, datatype)

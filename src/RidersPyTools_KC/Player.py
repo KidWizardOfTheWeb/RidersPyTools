@@ -35,6 +35,9 @@ class Player:
                     value_read = DME.read_word(offset_to_read)
                 if type_to_read == f32:
                     value_read = DME.read_float(offset_to_read)
+                if value_read is None:
+                    # No types were valid, read bytes instead
+                    value_read = DME.read_bytes(offset_to_read, type_to_read)
                 return value_read
             except RuntimeError as e:
                 print("RuntimeError: DME is " + str(e) + ". Failed to return value.")
@@ -55,7 +58,6 @@ class Player:
         # check_DME_value = vars(self.__getattribute__(name))
         type_to_write = vars(self.__getattribute__(name))["_datatype"]
         offset_to_write = vars(self.__getattribute__(name))["_offset"]
-
 
         # Check our types, read from game, return value if found
         try:

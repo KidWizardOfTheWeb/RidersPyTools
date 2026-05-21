@@ -15,21 +15,23 @@ TE_PLAYER_PTR: int = 0x80532d80 # change to match the current ptr at time of rel
 
 ZG_PLAYER_PTR: int = 0x804970CC # Player 1, other players may not be sequential. Do more research for this.
 
-class GameIDs:
+class GameIDs(Enum):
     SONIC_RIDERS_ID = b'GXEE8P' # Vanilla Game ID
     SONIC_RIDERS_TE_ID = b'GXSRTE' # Tournament Edition ID
     SONIC_RIDERS_DX_ID = b'GXSRDX' # DX ID
     SONIC_RIDERS_ZG_ID = b'SRZE8P' # Zero Gravity ID
     SONIC_RIDERS_FT_ID = b'FUTURE' # Future ID (follow the naming convention guys, c'mon...)
+    SONIC_RIDERS_PLUS_ID = b'GXEX8P'
 
-# class GameVersion(Enum):
-#     Vanilla = 1
-#     TE = 2
-#     DX = 3
-#     ZG = 4
-#     FT = 5
-#     pass
-
+GAME_ID_TO_NAME = {
+    GameIDs.SONIC_RIDERS_ID: "Sonic Riders",
+    GameIDs.SONIC_RIDERS_TE_ID: "Sonic Riders: Tournament Edition",
+    GameIDs.SONIC_RIDERS_DX_ID: "Sonic Riders: Director's Cut",
+    GameIDs.SONIC_RIDERS_ZG_ID: "Sonic Riders: Zero Gravity",
+    GameIDs.SONIC_RIDERS_FT_ID: "Sonic Riders: Future",
+    GameIDs.SONIC_RIDERS_PLUS_ID: "Sonic Riders: Plus"
+}
+ALL_GAMES = list(GAME_ID_TO_NAME.keys())
 
 # class Sizes(enum):
 # Signed
