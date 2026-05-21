@@ -16,7 +16,7 @@ GAME_DETAIL = None
 # AKA ExitMethod
 END_OF_GAME_FLAG = None
 
-class GameModes:
+class GameModes(IntEnum):
     TITLE_SCREEN = 0x1,
     STORY_MODE = 100,
     MISSION_MODE = 200,
