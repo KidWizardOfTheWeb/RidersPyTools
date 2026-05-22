@@ -1,6 +1,6 @@
-from src.RidersPyTools_KC.Characters import CHR_ID_TO_NAME
+from src.RidersPyTools_KC.Characters import CHR_ID_TO_NAME, CHR_ID_TO_DEFAULT_GEAR_NAME
 from src.RidersPyTools_KC.GameState import RaceState, ExitMethod, MODE_ID_TO_NAME, GameModes
-from src.RidersPyTools_KC.Gears import GEAR_ID_TO_NAME
+from src.RidersPyTools_KC.Gears import GEAR_ID_TO_NAME, ALL_GEARS
 from src.RidersPyTools_KC.Stages import STAGE_ID_TO_NAME
 from src.RidersPyTools_KC.Archetypes import ARCH_ID_TO_NAME
 from src.RidersPyTools_KC.Player import Player, DME
@@ -42,10 +42,50 @@ def RPC_loop(client_id):
 
         game_id = ridersObject1.gameID
         game_name = GAME_ID_TO_NAME[GameIDs(bytes(game_id))]
+
         current_mode_id = int(ridersObject1.currentMode)
         current_mode = MODE_ID_TO_NAME[current_mode_id]
+
         stage_name = STAGE_ID_TO_NAME[ridersObject1.currentStage]
+
         current_lap = int(player1.currentLap)
+
+        # TODO: add TE-specific/other mod specific structs if vanilla characters don't check out.
+        # Get game version with game_name variable from above, use that to select a dict
+        try:
+            character = CHR_ID_TO_NAME[player1.character]
+        except KeyError:
+            character = str(player1.character)
+
+        try:
+            gear = GEAR_ID_TO_NAME[player1.extremeGear]
+        except KeyError:
+            gear = str(player1.extremeGear)
+
+        small_image = ""
+        small_string = ""
+        
+        if gear == GEAR_ID_TO_NAME[255]:
+            # invalid gear
+            small_string = str(character + ", selecting a gear.")
+            small_image = str(character).lower() + "_default"
+        elif gear == GEAR_ID_TO_NAME[0]:
+            # If default gear, set string to char_default.
+            small_image = str(character).lower() + "_default"
+
+            try:
+                gear = CHR_ID_TO_DEFAULT_GEAR_NAME[player1.character]
+            except KeyError:
+                gear = GEAR_ID_TO_NAME[0]
+            small_string = str(character + " and " + gear)
+        else:
+            # TODO: use a translation map instead of multiple replacements
+            small_image = gear.replace(" ", "_").lower()
+            # Any extra characters like the apostrophe should also be removed for Board '70
+            small_image = small_image.replace("'", "")
+            # Covers e-rider
+            small_image = small_image.replace("-", "_")
+            small_string = str(character + " and " + gear)
 
         lap_string = ""
         if current_mode_id is not int(GameModes.TITLE_SCREEN) and current_mode_id is not int(GameModes.BATTLE_MODE) and current_mode_id is not int(GameModes.CUTSCENE_MODE):
@@ -55,9 +95,12 @@ def RPC_loop(client_id):
             details=current_mode + lap_string,
             state=stage_name,
             large_image=stage_name.replace(" ", "_").lower(),
+            large_text=stage_name,
+            small_image=small_image,
+            small_text=small_string,
             name=game_name
         )
-        time.sleep(5)  # Can only update rich presence every 15 seconds
+        time.sleep(5)  # Can only update rich presence every X seconds
 
 if __name__ == "__main__":
     RPC_loop(1507118425951174706)

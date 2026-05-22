@@ -1,3 +1,4 @@
+GEAR_INVALID = 255
 GEAR_DEFAULT = 0
 GEAR_HIGH_BOOSTER = 1
 GEAR_AUTO_SLIDER = 2
@@ -44,6 +45,7 @@ GEAR_BOARD_70 = 42 # TE Original No. 2
 GEAR_BITO = 43 # TE Original No. 3
 
 GEAR_ID_TO_NAME = {
+    GEAR_INVALID: "", # This should show nothing
     GEAR_DEFAULT: "Default Gear",
     GEAR_HIGH_BOOSTER: "High Booster",
     GEAR_AUTO_SLIDER: "Auto Slider",
