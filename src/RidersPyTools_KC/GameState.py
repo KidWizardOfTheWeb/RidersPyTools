@@ -28,6 +28,7 @@ class GameModes(IntEnum):
     WORLD_GRAND_PRIX = 800,
     UNK_MODE = 900,  # Complete mystery to this day...
     CUTSCENE_MODE = 1000
+    SAVE_MODE = 2000 # Something about time trial save screen
 
 MODE_ID_TO_NAME = {
     GameModes.TITLE_SCREEN: "Title Screen",
@@ -40,7 +41,8 @@ MODE_ID_TO_NAME = {
     GameModes.FREE_RACE: "Free Race",
     GameModes.WORLD_GRAND_PRIX: "World Grand Prix",
     GameModes.UNK_MODE: "Unknown Mode",
-    GameModes.CUTSCENE_MODE: "In a Cutscene"
+    GameModes.CUTSCENE_MODE: "In a Cutscene",
+    GameModes.SAVE_MODE: "Saving game"
 }
 ALL_MODES = list(MODE_ID_TO_NAME.keys())
 

@@ -61,9 +61,6 @@ def RPC_loop(client_id):
             gear = GEAR_ID_TO_NAME[player1.extremeGear]
         except KeyError:
             gear = str(player1.extremeGear)
-
-        small_image = ""
-        small_string = ""
         
         if gear == GEAR_ID_TO_NAME[255]:
             # invalid gear
