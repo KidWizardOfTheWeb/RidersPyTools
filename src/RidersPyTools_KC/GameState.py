@@ -42,7 +42,7 @@ MODE_ID_TO_NAME = {
     GameModes.WORLD_GRAND_PRIX: "World Grand Prix",
     GameModes.UNK_MODE: "Unknown Mode",
     GameModes.CUTSCENE_MODE: "In a Cutscene",
-    GameModes.SAVE_MODE: "Saving game"
+    GameModes.SAVE_MODE: "Return to menu"
 }
 ALL_MODES = list(MODE_ID_TO_NAME.keys())
 

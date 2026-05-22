@@ -85,7 +85,10 @@ def RPC_loop(client_id):
             small_string = str(character + " and " + gear)
 
         lap_string = ""
-        if current_mode_id is not int(GameModes.TITLE_SCREEN) and current_mode_id is not int(GameModes.BATTLE_MODE) and current_mode_id is not int(GameModes.CUTSCENE_MODE):
+        if current_mode_id not in {int(GameModes.TITLE_SCREEN),
+                                   int(GameModes.BATTLE_MODE),
+                                   int(GameModes.CUTSCENE_MODE),
+                                   int(GameModes.SAVE_MODE)}:
             lap_string = " - Race Start" if current_lap == 0 else " - Lap {}".format(current_lap)
 
         RPC.update(
