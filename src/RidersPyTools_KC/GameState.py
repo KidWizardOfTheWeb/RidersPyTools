@@ -17,7 +17,7 @@ GAME_DETAIL = None
 END_OF_GAME_FLAG = None
 
 class GameModes(IntEnum):
-    TITLE_SCREEN = 0x1,
+    STAGE_SELECT = 0x1, # Game initializes to this value on start rather than main menu on start. Odd.
     STORY_MODE = 100,
     MISSION_MODE = 200,
     TAG_MODE = 300,
@@ -26,12 +26,12 @@ class GameModes(IntEnum):
     TIME_TRIAL = 600,
     FREE_RACE = 700,
     WORLD_GRAND_PRIX = 800,
-    UNK_MODE = 900,  # Complete mystery to this day...
+    UNK_MODE = 900, # Complete mystery to this day...
     CUTSCENE_MODE = 1000
-    SAVE_MODE = 2000 # Something about time trial save screen
+    MAIN_MENU_MODE = 2000
 
 MODE_ID_TO_NAME = {
-    GameModes.TITLE_SCREEN: "Title Screen",
+    GameModes.STAGE_SELECT: "Stage Select",
     GameModes.STORY_MODE: "Story Mode",
     GameModes.MISSION_MODE: "Mission Mode",
     GameModes.TAG_MODE: "Tag Mode",
@@ -42,7 +42,7 @@ MODE_ID_TO_NAME = {
     GameModes.WORLD_GRAND_PRIX: "World Grand Prix",
     GameModes.UNK_MODE: "Unknown Mode",
     GameModes.CUTSCENE_MODE: "In a Cutscene",
-    GameModes.SAVE_MODE: "Return to menu"
+    GameModes.MAIN_MENU_MODE: "Main Menu"
 }
 ALL_MODES = list(MODE_ID_TO_NAME.keys())
 

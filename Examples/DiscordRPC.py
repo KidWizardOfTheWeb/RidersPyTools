@@ -46,7 +46,10 @@ def RPC_loop(client_id):
         current_mode_id = int(ridersObject1.currentMode)
         current_mode = MODE_ID_TO_NAME[current_mode_id]
 
-        stage_name = STAGE_ID_TO_NAME[ridersObject1.currentStage]
+        if current_mode_id is int(GameModes.MAIN_MENU_MODE):
+            state_string = "Mode Select"
+        else:
+            state_string = STAGE_ID_TO_NAME[ridersObject1.currentStage]
 
         current_lap = int(player1.currentLap)
 
@@ -85,17 +88,17 @@ def RPC_loop(client_id):
             small_string = str(character + " and " + gear)
 
         lap_string = ""
-        if current_mode_id not in {int(GameModes.TITLE_SCREEN),
+        if current_mode_id not in {int(GameModes.STAGE_SELECT),
                                    int(GameModes.BATTLE_MODE),
                                    int(GameModes.CUTSCENE_MODE),
-                                   int(GameModes.SAVE_MODE)}:
+                                   int(GameModes.MAIN_MENU_MODE)}:
             lap_string = " - Race Start" if current_lap == 0 else " - Lap {}".format(current_lap)
 
         RPC.update(
             details=current_mode + lap_string,
-            state=stage_name,
-            large_image=stage_name.replace(" ", "_").lower(),
-            large_text=stage_name,
+            state=state_string,
+            large_image=state_string.replace(" ", "_").lower(),
+            large_text=state_string,
             small_image=small_image,
             small_text=small_string,
             name=game_name
