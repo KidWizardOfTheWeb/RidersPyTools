@@ -96,10 +96,20 @@ if __name__ == "__main__":
         current_lap_in_game = int(player1.currentLap)
 
         if current_lap_in_game > LAP_COUNT:
+            # Divide centiseconds to get minutes and seconds
             final_lap_time = int(player1.lastSplitLapTime) / 100
+
+            # Divide into minutes and seconds
             minutes, seconds = divmod(final_lap_time, 60)
-            # TODO: split seconds into seconds/centiseconds properly
-            print("Finish time: {:02}:{:02}".format(int(minutes), seconds))
+
+            # Divide into seconds and centiseconds
+            seconds, centiseconds = divmod(seconds, 1)
+
+            # Round centiseconds to 2 places just like in-game
+            centiseconds = round(centiseconds, 2) * 100
+
+            # Print here
+            print("Finish time: {:02}:{:02}:{:02}".format(int(minutes), int(seconds), int(centiseconds)))
             break
 
         if current_lap_in_game > py_lap_count:
