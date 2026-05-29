@@ -132,12 +132,20 @@ class Player:
 
         # TODO: Define special flags for bitfield.
         # self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
+
+        # List of laps and their times in centiseconds, up to 99 laps
+        self.lapTimeList = [GenericData(ptr_start_addr + x, u32) for x in range(0xBF4, 0xD7C, 0x4)]
+
         self.rings = GenericData(ptr_start_addr + 0xB98, u32)
+
+        # Last recorded lap as an int, in centiseconds.
+        self.lastSplitLapTime = GenericData(ptr_start_addr + 0xD80, u32)
 
         # This is an array of bytes:
         # 1st byte = ms, 2nd byte = sec, 3rd byte = min
+        self.raceFinishTime = [GenericData(ptr_start_addr + 0xFF4, u8), GenericData(ptr_start_addr + 0xFF5, u8), GenericData(ptr_start_addr + 0xFF6, u8)]
         # Note: on lap being completed, this resets to zero in-game.
-        self.finishTime = [GenericData(ptr_start_addr + 0xFF8, u8), GenericData(ptr_start_addr + 0xFF9, u8), GenericData(ptr_start_addr + 0xFFA, u8)]
+        self.lapElapsedTime = [GenericData(ptr_start_addr + 0xFF8, u8), GenericData(ptr_start_addr + 0xFF9, u8), GenericData(ptr_start_addr + 0xFFA, u8)]
 
         self.currentLap = GenericData(ptr_start_addr + 0x102A, u8)
         self.previousLap = GenericData(ptr_start_addr + 0x102B, u8)

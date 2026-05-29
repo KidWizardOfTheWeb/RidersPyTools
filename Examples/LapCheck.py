@@ -9,9 +9,6 @@ from src.RidersPyTools_KC.Player import Player, DME
 from src.RidersPyTools_KC.RidersObject import RidersObject
 from src.RidersPyTools_KC.include.Constants import *
 
-# Python imports
-import datetime
-
 if __name__ == "__main__":
     # Keep some globals for data checks
     diff_min = 0
@@ -20,11 +17,13 @@ if __name__ == "__main__":
 
     minutes = 0
     seconds = 0
-    milliseconds = 0
+    centiseconds = 0
 
     is_reset = False
 
     restart_count = 0
+
+    LAP_COUNT = 3
 
     # Hook Dolphin here
     DME.hook()
@@ -95,6 +94,14 @@ if __name__ == "__main__":
             continue
 
         current_lap_in_game = int(player1.currentLap)
+
+        if current_lap_in_game > LAP_COUNT:
+            final_lap_time = int(player1.lastSplitLapTime) / 100
+            minutes, seconds = divmod(final_lap_time, 60)
+            # TODO: split seconds into seconds/centiseconds properly
+            print("Finish time: {:02}:{:02}".format(int(minutes), seconds))
+            break
+
         if current_lap_in_game > py_lap_count:
             # Increment lap count
             py_lap_count = current_lap_in_game
@@ -102,27 +109,32 @@ if __name__ == "__main__":
             # Show time for lap.
             minutes = int(ridersObject1.stageTimer[2])
             seconds = int(ridersObject1.stageTimer[1])
-            milliseconds = int(ridersObject1.stageTimer[0])
+            centiseconds = int(ridersObject1.stageTimer[0])
             if current_lap_in_game == 1:
-                print("Starting time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, milliseconds))
+                print("Starting time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, centiseconds))
             else:
-                print("Current race time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, milliseconds))
+                print("Current race time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, centiseconds))
 
             # Print and save diffs
-            current_time = datetime.time(minute=minutes, second=seconds, microsecond=milliseconds)
-            diff_time = datetime.time(minute=diff_min, second=diff_sec, microsecond=diff_milli)
+            # current_time = datetime.time(minute=minutes, second=seconds, microsecond=centiseconds)
+            # diff_time = datetime.time(minute=diff_min, second=diff_sec, microsecond=diff_milli)
 
             # Yes, the datetime class does NOT allow the difference between two time objects. This is how we have to do it.
-            overall_time_diff = datetime.datetime.combine(datetime.date.today(), current_time) - datetime.datetime.combine(datetime.date.today(), diff_time)
+            # overall_time_diff = datetime.datetime.combine(datetime.date.today(), current_time) - datetime.datetime.combine(datetime.date.today(), diff_time)
             # print("Time diff: " + str(overall_time_diff))
-            overall_time_obj = (datetime.datetime.min + overall_time_diff).time()
+            # overall_time_obj = (datetime.datetime.min + overall_time_diff).time()
 
             # Don't show time diffs on lap 1, to mirror game behavior
             if current_lap_in_game != 1:
-                print("Lap time: {:02d}:{:02d}:{:02d}".format(overall_time_obj.minute, overall_time_obj.second, overall_time_obj.microsecond))
-                diff_min = minutes
-                diff_sec = seconds
-                diff_milli = milliseconds
+                # Always in centiseconds, divide by 100 to get actual seconds.
+                # Does not have minutes value, must convert.
+                last_lap_time = int(player1.lapTimeList[current_lap_in_game-2]) / 100
+
+                print("Lap time: " + str(last_lap_time))
+                # print("Lap time: {:02d}:{:02d}:{:02d}".format(overall_time_obj.minute, overall_time_obj.second, overall_time_obj.microsecond))
+                # diff_min = minutes
+                # diff_sec = seconds
+                # diff_milli = centiseconds
 
             time.sleep(0.02)
             print("Speed: {}".format(player1.speedAsInt), "\n")
