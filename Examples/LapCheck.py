@@ -74,8 +74,9 @@ if __name__ == "__main__":
     # Use in-game lap count to check updates.
     while True:
         # If player state == startline and the lap counter is greater than 0, reset it.
-        if ridersObject1.exitMethod == ExitMethod.Retry and ridersObject1.get_race_state() == RaceState.Init and not is_reset:
-            print("\nRace restarted.")
+        if ridersObject1.exitMethod == ExitMethod.Retry and ridersObject1.get_race_state() in {RaceState.Init, RaceState.End} and not is_reset:
+            print("-" * 10)
+            print("Race restarted.")
             is_reset = True
             py_lap_count = 0
             restart_count += 1
@@ -83,7 +84,8 @@ if __name__ == "__main__":
             diff_min = 0
             diff_sec = 0
             diff_milli = 0
-            print("Restart count:", restart_count, "\n")
+            print("Restart count:", restart_count)
+            print("-"*10)
 
         # If you reset and the race is counting down, turn off lock mechanism
         if is_reset and ridersObject1.get_race_state() == RaceState.Countdown:
@@ -95,44 +97,18 @@ if __name__ == "__main__":
 
         current_lap_in_game = int(player1.currentLap)
 
-        if current_lap_in_game > LAP_COUNT:
-            # Divide centiseconds to get minutes and seconds
-            final_lap_time = int(player1.lastSplitLapTime) / 100
-
-            # Divide into minutes and seconds
-            minutes, seconds = divmod(final_lap_time, 60)
-
-            # Divide into seconds and centiseconds
-            seconds, centiseconds = divmod(seconds, 1)
-
-            # Round centiseconds to 2 places just like in-game
-            centiseconds = round(centiseconds, 2) * 100
-
-            # Print here
-            print("Finish time: {:02}:{:02}:{:02}".format(int(minutes), int(seconds), int(centiseconds)))
-            break
-
         if current_lap_in_game > py_lap_count:
             # Increment lap count
             py_lap_count = current_lap_in_game
-            print("Lap:", current_lap_in_game)
-            # Show time for lap.
-            minutes = int(ridersObject1.stageTimer[2])
-            seconds = int(ridersObject1.stageTimer[1])
-            centiseconds = int(ridersObject1.stageTimer[0])
+
+            if current_lap_in_game <= LAP_COUNT:
+                print("Lap:", current_lap_in_game)
+
             if current_lap_in_game == 1:
+                minutes = int(ridersObject1.stageTimer[2])
+                seconds = int(ridersObject1.stageTimer[1])
+                centiseconds = int(ridersObject1.stageTimer[0])
                 print("Starting time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, centiseconds))
-            else:
-                print("Current race time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, centiseconds))
-
-            # Print and save diffs
-            # current_time = datetime.time(minute=minutes, second=seconds, microsecond=centiseconds)
-            # diff_time = datetime.time(minute=diff_min, second=diff_sec, microsecond=diff_milli)
-
-            # Yes, the datetime class does NOT allow the difference between two time objects. This is how we have to do it.
-            # overall_time_diff = datetime.datetime.combine(datetime.date.today(), current_time) - datetime.datetime.combine(datetime.date.today(), diff_time)
-            # print("Time diff: " + str(overall_time_diff))
-            # overall_time_obj = (datetime.datetime.min + overall_time_diff).time()
 
             # Don't show time diffs on lap 1, to mirror game behavior
             if current_lap_in_game != 1:
@@ -140,11 +116,41 @@ if __name__ == "__main__":
                 # Does not have minutes value, must convert.
                 last_lap_time = int(player1.lapTimeList[current_lap_in_game-2]) / 100
 
-                print("Lap time: " + str(last_lap_time))
-                # print("Lap time: {:02d}:{:02d}:{:02d}".format(overall_time_obj.minute, overall_time_obj.second, overall_time_obj.microsecond))
-                # diff_min = minutes
-                # diff_sec = seconds
-                # diff_milli = centiseconds
+                # Divide into minutes and seconds
+                minutes, seconds = divmod(last_lap_time, 60)
+
+                # Divide into seconds and centiseconds
+                seconds, centiseconds = divmod(seconds, 1)
+
+                # Round centiseconds to 2 places just like in-game
+                centiseconds = round(centiseconds, 2) * 100
+
+                # Print here
+                print("Lap time: {:02}:{:02}:{:02}".format(int(minutes), int(seconds), int(centiseconds)))
+
+                # Show time for lap.
+                minutes = int(ridersObject1.stageTimer[2])
+                seconds = int(ridersObject1.stageTimer[1])
+                centiseconds = int(ridersObject1.stageTimer[0])
+
+                if current_lap_in_game <= LAP_COUNT:
+                    print("Current race time: {:02d}:{:02d}:{:02d}".format(minutes, seconds, centiseconds))
+
+                if current_lap_in_game > LAP_COUNT:
+                    # Divide centiseconds to get minutes and seconds
+                    final_lap_time = int(player1.lastSplitLapTime) / 100
+
+                    # Divide into minutes and seconds
+                    minutes, seconds = divmod(final_lap_time, 60)
+
+                    # Divide into seconds and centiseconds
+                    seconds, centiseconds = divmod(seconds, 1)
+
+                    # Round centiseconds to 2 places just like in-game
+                    centiseconds = round(centiseconds, 2) * 100
+
+                    # Print here
+                    print("Finish time: {:02}:{:02}:{:02}".format(int(minutes), int(seconds), int(centiseconds)))
 
             time.sleep(0.02)
             print("Speed: {}".format(player1.speedAsInt), "\n")
