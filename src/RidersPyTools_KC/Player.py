@@ -130,8 +130,8 @@ class Player:
         self.speed = GenericData(ptr_start_addr + 0xAAC, f32)
         self.speedAsInt = GenericData(ptr_start_addr + 0xABC, u32)
 
-        # TODO: Define special flags for bitfield.
-        # self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
+        # Uses SpecialFlags enum
+        self.specialFlags = GenericData(ptr_start_addr + 0x9D4, u32)
 
         # List of laps and their times in centiseconds, up to 99 laps
         self.lapTimeList = [GenericData(ptr_start_addr + x, u32) for x in range(0xBF4, 0xD7C, 0x4)]
