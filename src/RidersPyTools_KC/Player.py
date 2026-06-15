@@ -138,6 +138,8 @@ class Player:
 
         self.rings = GenericData(ptr_start_addr + 0xB98, u32)
 
+        self.playerDisplayFlags = GenericData(ptr_start_addr + 0xBA8, u32)
+
         # Last recorded lap as an int, in centiseconds.
         self.lastSplitLapTime = GenericData(ptr_start_addr + 0xD80, u32)
 
