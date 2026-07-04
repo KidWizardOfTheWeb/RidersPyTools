@@ -3,10 +3,10 @@ requires = ["hatchling >= 1.27.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "RidersPyTools_KC"
+name = "RidersPyTools"
 version = "0.0.1"
 authors = [
-  { name="KC", email="smasih2020@gmail.com" },
+  { name="KidChameleon", email="smasih2020@gmail.com" },
 ]
 description = "Tools to read/write data and scripts for Sonic Riders (GC) & mods on dolphin"
 readme = "README.md"
@@ -24,3 +24,6 @@ license-files = ["LICEN[CS]E*"]
 [project.urls]
 Homepage = "https://github.com/KidWizardOfTheWeb/RidersPyTools"
 Issues = "https://github.com/KidWizardOfTheWeb/RidersPyTools/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/RidersPyTools_KC"]
