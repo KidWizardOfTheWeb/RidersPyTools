@@ -82,6 +82,9 @@ class GenericData(OffsetAttr):
     def __int__(self):
         return int(getattr(self, "READ_FROM_DME"))
 
+    def __index__(self):
+        return int(getattr(self, "READ_FROM_DME"))
+
     def __float__(self):
         return float(getattr(self, "READ_FROM_DME"))
 

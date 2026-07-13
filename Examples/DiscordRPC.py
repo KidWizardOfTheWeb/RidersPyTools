@@ -43,15 +43,15 @@ def RPC_loop(client_id):
         game_id = ridersObject1.gameID
         game_name = GAME_ID_TO_NAME[GameIDs(bytes(game_id))]
 
-        current_mode_id = int(ridersObject1.currentMode)
+        current_mode_id = ridersObject1.currentMode
         current_mode = MODE_ID_TO_NAME[current_mode_id]
 
-        if current_mode_id is int(GameModes.MAIN_MENU_MODE):
+        if current_mode_id is GameModes.MAIN_MENU_MODE:
             state_string = "Mode Select"
         else:
             state_string = STAGE_ID_TO_NAME[ridersObject1.currentStage]
 
-        current_lap = int(player1.currentLap)
+        current_lap = player1.currentLap
 
         # TODO: add TE-specific/other mod specific structs if vanilla characters don't check out.
         # Get game version with game_name variable from above, use that to select a dict
@@ -88,10 +88,10 @@ def RPC_loop(client_id):
             small_string = str(character + " and " + gear)
 
         lap_string = ""
-        if current_mode_id not in {int(GameModes.STAGE_SELECT),
-                                   int(GameModes.BATTLE_MODE),
-                                   int(GameModes.CUTSCENE_MODE),
-                                   int(GameModes.MAIN_MENU_MODE)}:
+        if current_mode_id not in {GameModes.STAGE_SELECT,
+                                   GameModes.BATTLE_MODE,
+                                   GameModes.CUTSCENE_MODE,
+                                   GameModes.MAIN_MENU_MODE}:
             lap_string = " - Race Start" if current_lap == 0 else " - Lap {}".format(current_lap)
 
         RPC.update(
@@ -103,7 +103,7 @@ def RPC_loop(client_id):
             small_text=small_string,
             name=game_name
         )
-        time.sleep(5)  # Can only update rich presence every X seconds
+        time.sleep(1)  # Can only update rich presence every X seconds
 
 if __name__ == "__main__":
     RPC_loop(1507118425951174706)

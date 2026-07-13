@@ -47,7 +47,7 @@ if __name__ == "__main__":
     # Set a global lap counter as a lock mechanism
     # Get current lap count (we do this so this counts even if they are past init)
     # MAKE SURE TO TYPECAST TO GET THE INT VALUE
-    py_lap_count = int(player1.currentLap)
+    py_lap_count = player1.currentLap
 
     print("Current stage:", STAGE_ID_TO_NAME[ridersObject1.currentStage])
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         if is_reset:
             continue
 
-        current_lap_in_game = int(player1.currentLap)
+        current_lap_in_game = player1.currentLap
 
         if current_lap_in_game > py_lap_count:
             # Increment lap count

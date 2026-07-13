@@ -45,4 +45,4 @@ if __name__ == "__main__":
     time.sleep(0.05)
 
     # Set boost speed
-    player1.gearStats[int(player1.level)].boostSpeed = pSpeed(300.0)
+    player1.gearStats[player1.level].boostSpeed = pSpeed(300.0)
