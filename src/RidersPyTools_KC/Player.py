@@ -1,7 +1,8 @@
 """
 CLASS SCHEMA FOR PLAYER
 """
-import time
+
+from enum import IntEnum
 
 import dolphin_memory_engine as DME
 from .include.Controller import Controller
@@ -11,6 +12,35 @@ from .include.Constants import *
 from .GameState import GAME_VERSION
 
 INIT_STATE = True
+
+class PlayerState(IntEnum):
+    QTE = 0x0,
+    StartLine = 0x1,
+    Unknown = 0x2,
+    Death = 0x3,
+    Retire = 0x4,
+    Cruise = 0x5,
+    Jump = 0x6,
+    Fall = 0x7,
+    FrontflipRamp = 0x8,
+    BackflipRamp = 0x9,
+    UnknownTrick = 0xA,
+    HalfPipeTrick = 0xB,
+    ManualRamp = 0xC,
+    TurbulenceTrick = 0xD,
+    TurbulenceTrick2 = 0xE,
+    PlayerCollide = 0xF,
+    TurbulenceRide = 0x10,
+    QTE2 = 0x11,
+    RailGrind = 0x12,
+    Fly = 0x13,
+    AttackingPlayer = 0x15,
+    AttackedByPlayer = 0x16,
+    Stun = 0x17,
+    Unk1 = 0x18,
+    Run = 0x19,
+    StartLineShock = 0x1A,
+    Unknown2 = 0x1B,
 
 class Player:
     def __getattr__(self, name):

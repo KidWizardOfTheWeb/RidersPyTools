@@ -1,7 +1,7 @@
 from src.RidersPyTools_KC.Characters import CHR_ID_TO_NAME
 from src.RidersPyTools_KC.Gears import GEAR_ID_TO_NAME
 from src.RidersPyTools_KC.Archetypes import ARCH_ID_TO_NAME
-from src.RidersPyTools_KC.Player import Player, DME
+from src.RidersPyTools_KC.Player import Player, DME, PlayerState
 from src.RidersPyTools_KC.include.Constants import *
 import time
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         print("Character archetype ID:", int(player1.characterArchetype))
 
     print("Current lap:", player1.currentLap)
-    print("Player State:", player1.state)
+    print("Player State:", PlayerState(player1.state).name)
 
     # Let's adjust their rings!
     print("Changing rings.")
