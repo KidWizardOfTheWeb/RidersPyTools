@@ -19,7 +19,7 @@ class Type(IntFlag):
     Speed = 1 << 0,
     Fly = 1 << 1,
     Power = 1 << 2,
-    All = Speed | Fly | Power
+    All = 1 << 0 | 1 << 1 | 1 << 2
 
 class TrickRanks(IntEnum):
     CRank = 0,
