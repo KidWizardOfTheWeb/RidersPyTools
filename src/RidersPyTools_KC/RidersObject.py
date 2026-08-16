@@ -4,7 +4,7 @@ Contains all memory addresses from map/vanilla addresses fallback
 
 import dolphin_memory_engine as DME
 from .include.GenericData import GenericData
-from .include.GearStats import GearStats
+# from .include.GearStats import GearStats
 from .include.Constants import *
 from .GameState import GAME_VERSION, RACESTATE_ID_TO_NAME, ALL_RACESTATES, RaceState
 from .Player import Player
@@ -88,15 +88,12 @@ class RidersObject:
         # Find a way to define literally EVERY SYMBOL here.
         # Not easy, but most are defined. Some are custom with pointers and structs. Good luck.
 
-        # This is a hack that allows me to change where the addresses are.
-        # This makes it easier to find while we're testing TE.
-        # If no address found, use vanilla.
-        # If you want this for TE, send in stageTimerAddr 0x8053C480
-        # TE 2.4.6.1 currentStageAddr 0x8053C2E8
+        # This allows users to change where the addresses used for this class are.
+        # This makes it easier to find data while we're testing new TE changes due to the relocation of symbols.
+        # Use replacement values if they exist, else use default vanilla addresses.
+        addresses_to_use = default_general_addresses | replacement_values if replacement_values is not None else default_general_addresses
 
-        addresses_to_use = default_general_addresses | replacement_values
-
-        # This is 6 bytes long.
+        # This is 6 bytes long, due to it being a string of a specific length.
         self.gameID = GenericData(addresses_to_use["gameID"], 0x6)
 
         self.currentMode = GenericData(addresses_to_use["CurrentGameMode"], vu32)
@@ -107,8 +104,8 @@ class RidersObject:
                            GenericData(addresses_to_use["StageTimer"] + 0x1, u8),
                            GenericData(addresses_to_use["StageTimer"] + 0x2, u8)]
 
-        # List of all players 1-4
-        self.players = [Player(0 + idx) for idx in range(0,3)]
+        # List of all players 1-8
+        self.players = [Player(0 + idx) for idx in range(0,8)]
 
         INIT_STATE = False
         pass

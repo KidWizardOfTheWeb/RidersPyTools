@@ -68,7 +68,26 @@ class PlayerState(IntEnum):
     Unk1 = 0x18,
     Run = 0x19,
     StartLineShock = 0x1A,
-    Unknown2 = 0x1B,
+    Unknown2 = 0x1B
+
+class PlayerFlags(IntFlag):
+    none					= 0,
+    WallGrind				= 1 << 0,
+    Unknown					= 1 << 2,
+    WallBonk				= 1 << 5,
+    Unknown2				= 1 << 8,
+    OnTurbulence			= 1 << 11,
+    TurbulenceLRExit		= 1 << 14,
+    RaceWin					= 1 << 19,
+    ItemBoxCooldown			= 1 << 21,
+    InAPit					= 1 << 25,
+
+class PlayerStatus(IntFlag):
+    NoStatus 				= 0,
+    BallAndChainStatus 		= 1 << 0,
+    MagnetStatus			= 1 << 2,
+    InvincibilityStatus 	= 1 << 4
+
 
 class Player:
     def __getattr__(self, name):
@@ -292,7 +311,7 @@ class Player:
         # Add flags for this class
         self.playerDisplayFlags = GenericData(ptr_start_addr + 0xBA8, u32)
 
-        self.statusEffectFlags = GenericData(ptr_start_addr + 0xBA8, u32)
+        self.statusEffectFlags = GenericData(ptr_start_addr + 0xBB0, u32)
 
         self.stageProgress = GenericData(ptr_start_addr + 0xBC4, f32)
 
@@ -318,6 +337,7 @@ class Player:
 
         self.reciproExtendTimer = GenericData(ptr_start_addr + 0x101A, u16)
         self.death_spawnPoint = GenericData(ptr_start_addr + 0x101E, u16)
+        self.index = GenericData(ptr_start_addr + 0x1029, u8)
         self.currentLap = GenericData(ptr_start_addr + 0x102A, u8)
         self.previousLap = GenericData(ptr_start_addr + 0x102B, u8)
         self.placement_counter = GenericData(ptr_start_addr + 0x102C, u8)
